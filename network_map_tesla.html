@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 750px;
+            background-color: #222222;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"font": {"color": "white"}, "id": "next", "label": "next", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "week", "label": "week", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "look", "label": "look", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "good", "label": "good", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "lgvn", "label": "lgvn", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "idk", "label": "idk", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "amzn", "label": "amzn", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "aapl", "label": "aapl", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "sell", "label": "sell", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "buy", "label": "buy", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "arvl", "label": "arvl", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "go", "label": "go", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "gon", "label": "gon", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "na", "label": "na", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "spy", "label": "spy", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "qqq", "label": "qqq", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "swing", "label": "swing", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "trade", "label": "trade", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "delivery", "label": "delivery", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "number", "label": "number", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "wtf", "label": "wtf", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "tell", "label": "tell", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "alzheimer", "label": "alzheimer", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "climb", "label": "climb", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "every", "label": "every", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "year", "label": "year", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "high", "label": "high", "shape": "dot", "size": 10, "value": 2}]);
+        edges = new vis.DataSet([{"from": "next", "to": "week", "weight": 30}, {"from": "look", "to": "good", "weight": 20}, {"from": "look", "to": "lgvn", "weight": 10}, {"from": "good", "to": "idk", "weight": 10}, {"from": "amzn", "to": "aapl", "weight": 20}, {"from": "sell", "to": "buy", "weight": 20}, {"from": "buy", "to": "arvl", "weight": 20}, {"from": "arvl", "to": "go", "weight": 20}, {"from": "gon", "to": "na", "weight": 20}, {"from": "spy", "to": "qqq", "weight": 20}, {"from": "swing", "to": "trade", "weight": 20}, {"from": "delivery", "to": "number", "weight": 20}, {"from": "idk", "to": "wtf", "weight": 10}, {"from": "wtf", "to": "tell", "weight": 10}, {"from": "tell", "to": "alzheimer", "weight": 10}, {"from": "alzheimer", "to": "climb", "weight": 10}, {"from": "climb", "to": "every", "weight": 10}, {"from": "every", "to": "year", "weight": 10}, {"from": "year", "to": "high", "weight": 10}, {"from": "high", "to": "high", "weight": 10}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

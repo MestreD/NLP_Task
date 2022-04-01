@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 750px;
+            background-color: #222222;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"font": {"color": "white"}, "id": "crowd", "label": "crowd", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "source", "label": "source", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "alert", "label": "alert", "shape": "dot", "size": 10, "value": 4}, {"font": {"color": "white"}, "id": "rank", "label": "rank", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "trade", "label": "trade", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "originally", "label": "originally", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "system", "label": "system", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "get", "label": "get", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "pay", "label": "pay", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "top", "label": "top", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "contributor", "label": "contributor", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "4", "label": "4", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "1", "label": "1", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "50p", "label": "50p", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "22", "label": "22", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "call", "label": "call", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "3", "label": "3", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "29", "label": "29", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "2022", "label": "2022", "shape": "dot", "size": 10, "value": 2}, {"font": {"color": "white"}, "id": "hit", "label": "hit", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "nio", "label": "nio", "shape": "dot", "size": 10, "value": 1}, {"font": {"color": "white"}, "id": "ride", "label": "ride", "shape": "dot", "size": 10, "value": 1}]);
+        edges = new vis.DataSet([{"from": "crowd", "to": "source", "weight": 80}, {"from": "source", "to": "alert", "weight": 80}, {"from": "alert", "to": "rank", "weight": 80}, {"from": "alert", "to": "trade", "weight": 50}, {"from": "alert", "to": "originally", "weight": 50}, {"from": "rank", "to": "system", "weight": 80}, {"from": "system", "to": "get", "weight": 80}, {"from": "get", "to": "pay", "weight": 80}, {"from": "pay", "to": "top", "weight": 80}, {"from": "top", "to": "contributor", "weight": 80}, {"from": "4", "to": "1", "weight": 60}, {"from": "4", "to": "50p", "weight": 50}, {"from": "1", "to": "22", "weight": 50}, {"from": "originally", "to": "call", "weight": 50}, {"from": "call", "to": "3", "weight": 50}, {"from": "3", "to": "29", "weight": 50}, {"from": "29", "to": "2022", "weight": 50}, {"from": "2022", "to": "50p", "weight": 50}, {"from": "22", "to": "hit", "weight": 50}, {"from": "nio", "to": "ride", "weight": 40}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
