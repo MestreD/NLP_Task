@@ -21,7 +21,7 @@ from collections import Counter
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 stop_words = stopwords.words('english')
-custom_stopwords = ["Tesla", "tesla", "TSLA", "tsla", "Rivian", "rivian", "RIVN", "rivn"]
+custom_stopwords = ["Tesla", "tesla", "TSLA", "tsla", "Rivian", "rivian", "RIVN", "rivn", "NIO", "nio"]
 normalizer = WordNetLemmatizer()
 #Library to count words
 from collections import Counter
@@ -101,14 +101,20 @@ st.subheader("Raw Data")
 col1, col_mid, col2 = st.columns((1, 0.1, 1))
 with col1:
     if companyA == "TSLA":
-        st.write("Tesla")
-        st.write(scrape("TSLA", 100).head())
+        companyA_name = "Tesla"
+        st.write(companyA_name)
+        companyA_df = scrape("TSLA", 100)
+        st.write(companyA_df.head())
     if companyA == "NIO":
-        st.write("NIO")
-        st.write(scrape("NIO", 100).head())
+        companyA_name = "NIO"
+        st.write(companyA_name)
+        companyA_df = scrape("NIO", 100)
+        st.write(companyA_df.head())
     if companyA == "RIVN":
-        st.write("Rivian")
-        st.write(scrape("NIO", 100).head())
+        companyA_name = "Rivian"
+        st.write(companyA_name)
+        companyA_df = scrape("RIVN", 100)
+        st.write(companyA_df.head())
 
 with col2:
     if companyA == "TSLA":
@@ -136,14 +142,20 @@ st.write('\n')
 col1, col_mid, col2 = st.columns((1, 0.1, 1))
 with col1:
     if companyB == "TSLA":
-        st.write("Tesla")
-        st.write(scrape("TSLA", 100).head())
+        companyB_name = "Tesla"
+        st.write(companyB_name)
+        companyB_df = scrape("TSLA", 100)
+        st.write(companyB_df.head())
     if companyB == "NIO":
-        st.write("NIO")
-        st.write(scrape("NIO", 100).head())
+        companyB_name = "NIO"
+        st.write(companyB_name)
+        companyB_df = scrape("NIO", 100)
+        st.write(companyB_df.head())
     if companyB == "RIVN":
-        st.write("Rivian")
-        st.write(scrape("NIO", 100).head())
+        companyB_name = "Rivian"
+        st.write(companyB_name)
+        companyB_df = scrape("RIVN", 100)
+        st.write(companyB_df.head())
 
 with col2:
     if companyB == "TSLA":
@@ -168,4 +180,70 @@ with col2:
                      src="https://en.wikipedia.org/wiki/Rivian"></iframe>',
                      unsafe_allow_html=True ) 
 st.markdown("""---""")
+
+companyA_pt = preprocess_text("".join(companyA_df.tweets), custom_stopwords)
+companyB_pt = preprocess_text("".join(companyB_df.tweets), custom_stopwords)
+st.write('\n')
+st.write('\n')
+wordcloud1 = WordCloud (
+                    background_color = "#0E1117",
+                    width = 620,
+                    height = 410
+                        ).generate(' '.join(companyA_pt))
+wordcloud2 = WordCloud (
+                    background_color = "#0E1117",
+                    width = 620,
+                    height = 410
+                        ).generate(' '.join(companyB_pt))
+st.header("WordCloud")
+st.write("This Word Cloud is a visual displays of tweets content – text analysis that displays the most prominent or frequent words in the data collected")  
+fig, (ax1, ax2) = plt.subplots(1, 2)
+fig.patch.set_facecolor("#0E1117")
+ax1.imshow(wordcloud1, interpolation='bilInear')
+ax1.set_title(companyA, color="white")
+ax1.axis('off')
+ax1.patch.set_facecolor("#0E1117")
+ax2.imshow(wordcloud2, interpolation='bilInear')
+ax2.set_title(companyB, color="white")
+ax2.axis('off')
+ax2.patch.set_facecolor("#0E1117")
+st.pyplot(fig)
+st.markdown("""---""")
+
+st.subheader("Finding the sentiment of the tweets.")
+st.write('In this case I am using NLTK library with function SentimentIntensityAnalyzer to classify the sentiment on each tweet, and them plotting the sum of them with the library plotly.') 
+# Clean the data and create a new column with it.
+companyA_df["clean_tweet"] = companyA_df["tweets"].apply(lambda x: clean_text(x, custom_stopwords))
+companyB_df["clean_tweet"] = companyB_df["tweets"].apply(lambda x: clean_text(x, custom_stopwords))
+# Now we can apply the sentiment function and create a new column with it.
+companyA_df["sentiment"] = companyA_df["clean_tweet"].apply(sentiment)
+companyB_df["sentiment"] = companyB_df["clean_tweet"].apply(sentiment)
+
+# Total sentiment count
+sentiment_count_A =  companyA_df.groupby('sentiment')['sentiment'].count()
+sentiment_count_B = companyB_df.groupby('sentiment')['sentiment'].count()
+#Creating a df with that count to plot. 
+total_sentiments_A = sentiment_count_A.to_frame()
+total_sentiments_A.rename(columns={"sentiment":"count"}, inplace=True)
+total_sentiments_A.reset_index(inplace=True)
+total_sentiments_A["company"] = companyA_name
+
+total_sentiments_B = sentiment_count_B.to_frame()
+total_sentiments_B.rename(columns={"sentiment":"count"}, inplace=True)
+total_sentiments_B.reset_index(inplace=True)
+total_sentiments_B["company"] = companyB_name
+
+total_sentiments = [total_sentiments_A, total_sentiments_B]
+
+total_sentiments = pd.concat(total_sentiments, ignore_index=True)
+
+# Plotly
+colours = {
+    companyA: "#EF3A4C",
+    companyB: "#3EC1CD"
+}
+fig = px.histogram(total_sentiments, x="sentiment", y="count",
+             color='company', barmode='group',
+             height=600,  color_discrete_map=colours)
+st.plotly_chart(fig, use_container_width=True)
 
