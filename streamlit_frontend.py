@@ -196,7 +196,7 @@ wordcloud2 = WordCloud (
                     height = 410
                         ).generate(' '.join(companyB_pt))
 st.header("WordCloud")
-st.write("This Word Cloud is a visual displays of tweets content – text analysis that displays the most prominent or frequent words in the data collected")  
+st.write("This Word Cloud is a visual displays of tweets content – text analysis that displays the most prominent or frequent words in the data collected.")  
 fig, (ax1, ax2) = plt.subplots(1, 2)
 fig.patch.set_facecolor("#0E1117")
 ax1.imshow(wordcloud1, interpolation='bilInear')
@@ -210,8 +210,8 @@ ax2.patch.set_facecolor("#0E1117")
 st.pyplot(fig)
 st.markdown("""---""")
 
-st.subheader("Finding the sentiment of the tweets.")
-st.write('In this case I am using NLTK library with function SentimentIntensityAnalyzer to classify the sentiment on each tweet, and them plotting the sum of them with the library plotly.') 
+st.subheader("Finding tweets sentiment. Part 1")
+st.write("NLTK already has a built-in, pretrained sentiment analyzer called VADER (Valence Aware Dictionary and sEntiment Reasoner). Since VADER is pretrained, you can get results more quickly than with many other analyzers. Is best suited for language used in social media, like Twitter with short sentences and some slang and abbreviations to classify the sentiment on each tweet, and them plot the sum with the library plotly.") 
 # Clean the data and create a new column with it.
 companyA_df["clean_tweet"] = companyA_df["tweets"].apply(lambda x: clean_text(x, custom_stopwords))
 companyB_df["clean_tweet"] = companyB_df["tweets"].apply(lambda x: clean_text(x, custom_stopwords))
@@ -246,4 +246,35 @@ fig = px.histogram(total_sentiments, x="sentiment", y="count",
              color='company', barmode='group',
              height=600,  color_discrete_map=colours)
 st.plotly_chart(fig, use_container_width=True)
+st.markdown("""---""")
+st.subheader("Finding tweets sentiment. Part 2")
+st.write("In this part I will use the library TextBlob. The sentiment property returns a namedtuple of the form Sentiment(polarity, subjectivity). The polarity score is a float within the range [-1.0, 1.0]. The subjectivity is a float within the range [0.0, 1.0] where 0.0 is very objective and 1.0 is very subjective.")
+
+#building new columns with calculations
+companyA_df["polarity"] = companyA_df["clean_tweet"].apply(lambda x: TextBlob(x).sentiment[0])
+companyA_df["subjectivity"] = companyA_df["clean_tweet"].apply(lambda x: TextBlob(x).sentiment[1])
+companyB_df["polarity"] = companyB_df["clean_tweet"].apply(lambda x: TextBlob(x).sentiment[0])
+companyB_df["subjectivity"] = companyB_df["clean_tweet"].apply(lambda x: TextBlob(x).sentiment[1])
+
+# Building dataframes for the visualization. 
+companyA_ma = companyA_df[["tweet_date", "polarity"]]
+companyA_ma = companyA_ma.sort_values(by="tweet_date", ascending=True)
+companyA_ma["MA Polarity"] = companyA_ma.polarity.rolling(10, min_periods=3).mean()
+
+companyB_ma = companyB_df[["tweet_date", "polarity"]]
+companyB_ma = companyB_ma.sort_values(by="tweet_date", ascending=True)
+companyB_ma["MA Polarity"] = companyB_ma.polarity.rolling(10, min_periods=3).mean()
+
+#Plotting both graph with Plotly. 
+
+colours = {
+    companyA: "#EF3A4C",
+    companyB: "#3EC1CD"
+}
+fig1 = px.line(companyA_ma, x="tweet_date", y="MA Polarity", title="Polarity moving average",  color_discrete_map=colours)
+fig1.add_trace(go.Scatter(x = companyB_ma["tweet_date"], y = companyB_ma["MA Polarity"], name = companyB_name))
+
+fig1.update_xaxes(rangeslider_visible=True)
+st.plotly_chart(fig1, use_container_width=True)
+
 
