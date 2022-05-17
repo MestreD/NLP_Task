@@ -109,17 +109,17 @@ else:
         if companyA == "TSLA":
             companyA_name = "Tesla"
             st.write(companyA_name)
-            companyA_df = scrape("TSLA", 1000)
+            companyA_df = scrape("TSLA", 500)
             st.write(companyA_df.head())
         if companyA == "NIO":
             companyA_name = "NIO"
             st.write(companyA_name)
-            companyA_df = scrape("NIO", 1000)
+            companyA_df = scrape("NIO", 500)
             st.write(companyA_df.head())
         if companyA == "RIVN":
             companyA_name = "Rivian"
             st.write(companyA_name)
-            companyA_df = scrape("RIVN", 1000)
+            companyA_df = scrape("RIVN", 500)
             st.write(companyA_df.head())
 
     with col2:
@@ -139,17 +139,17 @@ else:
         if companyB == "TSLA":
             companyB_name = "Tesla"
             st.write(companyB_name)
-            companyB_df = scrape("TSLA", 1000)
+            companyB_df = scrape("TSLA", 500)
             st.write(companyB_df.head())
         if companyB == "NIO":
             companyB_name = "NIO"
             st.write(companyB_name)
-            companyB_df = scrape("NIO", 1000)
+            companyB_df = scrape("NIO", 500)
             st.write(companyB_df.head())
         if companyB == "RIVN":
             companyB_name = "Rivian"
             st.write(companyB_name)
-            companyB_df = scrape("RIVN", 1000)
+            companyB_df = scrape("RIVN", 500)
             st.write(companyB_df.head())
 
     with col2:
