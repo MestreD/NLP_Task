@@ -1,0 +1,12 @@
+matplotlib==3.5.2
+networkx==2.8
+nltk==3.7
+numpy==1.22.3
+pandas==1.4.2
+plotly==5.8.0
+pyvis==0.2.1
+seaborn==0.11.2
+streamlit==1.9.0
+textblob==0.17.1
+tweepy==4.9.0
+wordcloud==1.8.1
