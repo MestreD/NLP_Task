@@ -37,9 +37,6 @@ sia = SentimentIntensityAnalyzer()
 from textblob import Word, TextBlob
 # NLTK library to build ngrams.
 from nltk.util import ngrams
-# NetworkX is a Python package for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks.
-import networkx as nx
-from pyvis.network import Network
 # Built on top of plotly.js, plotly.py is a high-level, declarative charting library.
 import plotly.express as px
 from plotly.subplots import make_subplots
