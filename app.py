@@ -19,24 +19,25 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
+normalizer = WordNetLemmatizer()
+import nltk
+nltk.download('vader_lexicon')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
+nltk.download('stopwords')
 stop_words = stopwords.words('english')
 custom_stopwords = ["Tesla", "tesla", "TSLA", "tsla", "Rivian", "rivian", "RIVN", "rivn", "NIO", "nio"]
-normalizer = WordNetLemmatizer()
+from nltk.sentiment import SentimentIntensityAnalyzer
+sia = SentimentIntensityAnalyzer()
+# NLTK library to build ngrams.
+from nltk.util import ngrams
 #Library to count words
 from collections import Counter
 # library to build wordclouds
 from wordcloud import WordCloud
 # NLTK to analice sentiment. 
-import nltk
-nltk.download('vader_lexicon')
-from nltk.sentiment import SentimentIntensityAnalyzer
-sia = SentimentIntensityAnalyzer()
 #Another Library to perform sentiment analisis.
 from textblob import Word, TextBlob
-# NLTK library to build ngrams.
-from nltk.util import ngrams
 # Built on top of plotly.js, plotly.py is a high-level, declarative charting library.
 import plotly.express as px
 from plotly.subplots import make_subplots
@@ -270,42 +271,42 @@ else:
     fig['layout'].update(height = 900, width = 700, title = "Polarity and subjectivity scatter plot", xaxis_title="Polarity", yaxis_title="Subjectivity")
     st.plotly_chart(fig)
 
-st.markdown("""---""")
-st.subheader("Counting the most used words by sentiment. ")
-    # Joining and preprocessing all tweets based on sentiment.
-companyA_preprocess_positive = preprocess_text("".join(companyA_df["tweets"][companyA_df["sentiment"] == "positive"]), custom_stopwords)
-companyA_preprocess_negative = preprocess_text("".join(companyA_df["tweets"][companyA_df["sentiment"] == "negative"]), custom_stopwords)
+    st.markdown("""---""")
+    st.subheader("Counting the most used words by sentiment. ")
+        # Joining and preprocessing all tweets based on sentiment.
+    companyA_preprocess_positive = preprocess_text("".join(companyA_df["tweets"][companyA_df["sentiment"] == "positive"]), custom_stopwords)
+    companyA_preprocess_negative = preprocess_text("".join(companyA_df["tweets"][companyA_df["sentiment"] == "negative"]), custom_stopwords)
 
-companyB_preprocess_positive = preprocess_text("".join(companyB_df["tweets"][companyB_df["sentiment"] == "positive"]), custom_stopwords)
-companyB_preprocess_negative = preprocess_text("".join(companyB_df["tweets"][companyB_df["sentiment"] == "negative"]), custom_stopwords)
+    companyB_preprocess_positive = preprocess_text("".join(companyB_df["tweets"][companyB_df["sentiment"] == "positive"]), custom_stopwords)
+    companyB_preprocess_negative = preprocess_text("".join(companyB_df["tweets"][companyB_df["sentiment"] == "negative"]), custom_stopwords)
 
-#Counting the words of each sentiment. 
-companyA_bow_positive = Counter(companyA_preprocess_positive)
-companyA_bow_negative = Counter(companyA_preprocess_negative)
+    #Counting the words of each sentiment. 
+    companyA_bow_positive = Counter(companyA_preprocess_positive)
+    companyA_bow_negative = Counter(companyA_preprocess_negative)
 
-companyB_bow_positive = Counter(companyB_preprocess_positive)
-companyB_bow_negative = Counter(companyB_preprocess_negative)
+    companyB_bow_positive = Counter(companyB_preprocess_positive)
+    companyB_bow_negative = Counter(companyB_preprocess_negative)
 
-# Printing the most common words by sentiment. 
-col1, col_mid, col2 = st.columns((1, 0.1, 1))
-with col1:
-    st.write("Positive words  for " + companyA_name +".")
-    most_common_companyA_positive = companyA_bow_positive.most_common(10)
-    st.write(str(most_common_companyA_positive))
+    # Printing the most common words by sentiment. 
+    col1, col_mid, col2 = st.columns((1, 0.1, 1))
+    with col1:
+        st.write("Positive words  for " + companyA_name +".")
+        most_common_companyA_positive = companyA_bow_positive.most_common(10)
+        st.write(str(most_common_companyA_positive))
 
-    st.write("Negative words for " + companyA_name +".")
-    most_common_companyA_negative = companyA_bow_negative.most_common(10)
-    st.write(str(most_common_companyA_negative))
+        st.write("Negative words for " + companyA_name +".")
+        most_common_companyA_negative = companyA_bow_negative.most_common(10)
+        st.write(str(most_common_companyA_negative))
 
-with col2:
-    st.write("Positive words  for " + companyB_name +".")
-    most_common_companyB_positive = companyB_bow_positive.most_common(10)
-    st.write(str(most_common_companyB_positive))
+    with col2:
+        st.write("Positive words  for " + companyB_name +".")
+        most_common_companyB_positive = companyB_bow_positive.most_common(10)
+        st.write(str(most_common_companyB_positive))
 
-    st.write("Negative words for " + companyB_name +".")
-    most_common_companyB_negative = companyB_bow_negative.most_common(10)
-    st.write(str(most_common_companyB_negative))
+        st.write("Negative words for " + companyB_name +".")
+        most_common_companyB_negative = companyB_bow_negative.most_common(10)
+        st.write(str(most_common_companyB_negative))
 
-st.markdown("""---""")
+    st.markdown("""---""")
 
-st.subheader("This is the end of this project in which I have some limitations, the free tweeter API doesn't let me collect tweets selecting specific dates from which the comparison will be more precise in time. Positive and negative word count doesn't give much insight, so in next projects N-grams will be incorporated to gain more context about those words and feelings.")
+    st.subheader("This is the end of this project in which I have some limitations, the free tweeter API doesn't let me collect tweets selecting specific dates from which the comparison will be more precise in time. Positive and negative word count doesn't give much insight, so in next projects N-grams will be incorporated to gain more context about those words and feelings.")
