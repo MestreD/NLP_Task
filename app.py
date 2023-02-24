@@ -14,7 +14,6 @@ import tweepy as tw
 import configparser as cp
 #NLTK its used to pre-proccess text and regex its used to filter that text.
 import nltk, re
-nltk.download('punkt')
 from nltk.corpus import wordnet
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
