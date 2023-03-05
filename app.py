@@ -20,7 +20,6 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
 normalizer = WordNetLemmatizer()
-nltk.download()
 nltk.download('punkt')
 nltk.download('vader_lexicon')
 nltk.download('wordnet')
