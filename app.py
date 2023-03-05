@@ -21,7 +21,7 @@ from nltk.stem import WordNetLemmatizer
 from collections import Counter
 normalizer = WordNetLemmatizer()
 import nltk.data
-tokenizer = nltk.data.load('nltk:tokenizers/punkt/english.pickle')
+tokenizer = nltk.data.load('nltk:tokenizers/punkt/PY3/english.pickle')
 nltk.download('vader_lexicon')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
