@@ -21,6 +21,16 @@ from nltk.stem import WordNetLemmatizer
 from collections import Counter
 normalizer = WordNetLemmatizer()
 import nltk
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download()
 nltk.download('punkt')
 nltk.download('vader_lexicon')
 nltk.download('wordnet')
@@ -111,17 +121,17 @@ else:
         if companyA == "TSLA":
             companyA_name = "Tesla"
             st.write(companyA_name)
-            companyA_df = scrape("TSLA", 100)
+            companyA_df = scrape("TSLA", 5)
             st.write(companyA_df.head())
         if companyA == "NIO":
             companyA_name = "NIO"
             st.write(companyA_name)
-            companyA_df = scrape("NIO", 100)
+            companyA_df = scrape("NIO", 5)
             st.write(companyA_df.head())
         if companyA == "RIVN":
             companyA_name = "Rivian"
             st.write(companyA_name)
-            companyA_df = scrape("RIVN", 100)
+            companyA_df = scrape("RIVN", 5)
             st.write(companyA_df.head())
 
     with col2:
